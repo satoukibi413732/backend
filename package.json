@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "debug": "^4.1.1",
+    "imageinfo": "^1.0.4",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "koa-convert": "^1.2.0",

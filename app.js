@@ -8,7 +8,7 @@ const cors = require("koa2-cors");
 const mongoose = require("mongoose");
 const config = require("./config");
 
-const index = require("./routes/index");
+const index = require("./routes/resource");
 const users = require("./routes/users");
 
 // error handler
@@ -27,10 +27,11 @@ app.use(require("koa-static")(__dirname + "/public"));
 app.use(
   cors({
     origin: function(ctx) {
-      if (ctx.url === "/test") {
-        return "*"; // 允许来自所有域名请求
-      }
-      return "http://localhost:8080";
+      // if (ctx.url === "/test") {
+      //   return "*"; // 允许来自所有域名请求
+      // }
+      // return "http://localhost:8080";
+      return "*";
     },
     exposeHeaders: ["WWW-Authenticate", "Server-Authorization"],
     maxAge: 5,
