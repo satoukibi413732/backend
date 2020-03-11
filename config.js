@@ -3,5 +3,8 @@ module.exports = {
   DB_OPTION: {
     useNewUrlParser: true,
     useUnifiedTopology: true
-  }
+  },
+  //微信小程序
+  appid: "wx8fd95537633ed6a5",
+  secret: "9c7d3582b4033d2df1675dfbd14a1d14"
 };
