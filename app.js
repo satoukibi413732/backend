@@ -6,6 +6,8 @@ const bodyparser = require("koa-bodyparser");
 const logger = require("koa-logger");
 const cors = require("koa2-cors");
 const mongoose = require("mongoose");
+const KoaBodyParser = require('koa-bodyparser');
+const KoaXmlBody = require('koa-xml-body');
 const config = require("./config");
 
 const index = require("./routes/resource");
@@ -22,11 +24,13 @@ app.use(
 );
 app.use(json());
 app.use(logger());
+app.use(KoaXmlBody());
+app.use(KoaBodyParser());
 app.use(require("koa-static")(__dirname + "/public"));
 // 跨域解决
 app.use(
   cors({
-    origin: function(ctx) {
+    origin: function (ctx) {
       // if (ctx.url === "/test") {
       //   return "*"; // 允许来自所有域名请求
       // }
