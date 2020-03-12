@@ -32,6 +32,7 @@ module.exports = {
                   username: username,
                   openid: openid,
                   gender: gender || 0,
+                  magazine: [],
                   registerdate: new Date()
                 });
                 const doc = newUser.save();
