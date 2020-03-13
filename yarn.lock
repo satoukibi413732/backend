@@ -1038,6 +1038,14 @@ koa-views@^6.2.0:
     mz "^2.4.0"
     pretty "^2.0.0"
 
+koa-xml-body@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/koa-xml-body/-/koa-xml-body-2.1.0.tgz#16e04065c2c9baf4c693168495fd63fbdde79065"
+  integrity sha512-OA+QmT6g1Stlg8AmqcdvYbClF0oIf3jXQVqJxl3a2S6+Lvi65xsH/0ozdN8rnCAFwetysuMiNL0hB7pLpvFKEQ==
+  dependencies:
+    raw-body "^2.2.0"
+    xml2js "^0.4.17"
+
 koa2-cors@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/koa2-cors/-/koa2-cors-2.0.6.tgz#9ad23df3a0b9bb84530b46f5944f3fb576086554"
@@ -1544,7 +1552,7 @@ qs@^6.5.2:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.1.tgz#20082c65cb78223635ab1a9eaca8875a29bf8ec9"
   integrity sha512-Cxm7/SS/y/Z3MHWSxXb8lIFqgqBowP5JMlTUFyJN88y0SGQhVmZnqFK/PeuMX9LzUyWsqqhNxIyg0jlzq946yA==
 
-raw-body@^2.3.3:
+raw-body@^2.2.0, raw-body@^2.3.3:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.4.1.tgz#30ac82f98bb5ae8c152e67149dac8d55153b168c"
   integrity sha512-9WmIKF6mkvA0SLmA2Knm9+qj89e+j1zqgyn8aXGd7+nAduPoqgI9lO57SAZNn/Byzo5P7JhXTyg9PzaJbH73bA==
@@ -2010,7 +2018,7 @@ xdg-basedir@^3.0.0:
   resolved "https://registry.yarnpkg.com/xdg-basedir/-/xdg-basedir-3.0.0.tgz#496b2cc109eca8dbacfe2dc72b603c17c5870ad4"
   integrity sha1-SWsswQnsqNus/i3HK2A8F8WHCtQ=
 
-xml2js@^0.4.23:
+xml2js@^0.4.17, xml2js@^0.4.23:
   version "0.4.23"
   resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.23.tgz#a0c69516752421eb2ac758ee4d4ccf58843eac66"
   integrity sha1-oMaVFnUkIesqx1juTUzPWIQ+rGY=
