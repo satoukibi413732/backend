@@ -11,20 +11,19 @@ var http = require("http");
 const https = require("https");
 const sslify = require("koa-sslify").default;
 const fs = require("fs");
-
 /**
  * Get port from environment and store in Express.
  */
 // 路径为证书放置的位置
 
-const preDir = __dirname.split("/bin");
-console.log(process.cwd());
-const httpsOption = {
+// SSL options
+console.log(process.cwd() + "/public/httpskey/2_shenkun-media.cn.key");
+var options = {
   key: fs.readFileSync(
     process.cwd() + "/public/httpskey/2_shenkun-media.cn.key"
   ),
   cert: fs.readFileSync(
-    process.cwd() + "/public/httpskey/1_shenkun-media.cn_bundle.pem"
+    process.cwd() + "/public/httpskey/1_shenkun-media.cn_bundle.crt"
   )
 };
 
@@ -37,7 +36,7 @@ var port = normalizePort(process.env.PORT || "3000");
  */
 
 // var server = http.createServer(app.callback());
-var server = https.createServer(httpsOption, app.callback());
+var server = https.createServer(options, app.callback());
 
 /**
  * Listen on provided port, on all network interfaces.
