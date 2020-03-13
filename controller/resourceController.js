@@ -90,10 +90,11 @@ module.exports = {
     if (openid) {
       let boughtList = [];
       await User.findOne({ openid: openid }, (err, res) => {
-        boughtList = res.magazine;
-        console.log(boughtList);
+        if (res) {
+          boughtList = res.magazine;
+          console.log(boughtList);
+        }
       });
-
       iamgeFmt.forEach((item, i) => {
         boughtList.forEach((db, j) => {
           if (item.name === db) {
