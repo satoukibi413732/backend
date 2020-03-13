@@ -119,7 +119,7 @@ module.exports = {
             mch_id: config.mch_id,
             //    生成随机字符串，长度32位以内,我们使用stringRandom库生成16位随机数
             nonce_str: stringRandom(16),
-            notify_url: ctx.request.origin + "/setMagazine",
+            notify_url: ctx.request.origin + "/pay/result",
             openid: openid,
             out_trade_no: trade_no,
             spbill_create_ip: config.spbill_create_ip,
@@ -173,7 +173,14 @@ module.exports = {
             }
         });
     },
-
+    async payResult() {
+        const xml = ctx.request.body.xml;
+        const successXml = `<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>`;
+        if (returnCode === 'SUCCESS' && xml.result_code[0] === 'SUCCESS') {
+            //返回xml告诉微信已经收到，并且不会再重新调用此接口
+            ctx.body = successXml
+        }
+    },
     async setMagazine(ctx) {
         let result = {
             state: false,
