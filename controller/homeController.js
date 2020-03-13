@@ -27,7 +27,7 @@ module.exports = {
                         }
                         // 检查用户名是否已存在
                         if (!resp) {
-                            if (errcode === 0) {
+                            if (openid) {
                                 const newUser = new User({
                                     username: username,
                                     openid: openid,
