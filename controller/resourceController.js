@@ -4,10 +4,20 @@ const config = require("../config");
 const stringRandom = require("string-random");
 //node加密相关
 const crypto = require("crypto");
+const md5 = require("md5");
 const axios = require("axios");
 //解析和生成xml文件的npm包
 const Xml2js = require("xml2js");
 
+
+const objToXml = obj => {
+  let xml = '<xml>'
+  for (let key in obj) {
+    xml += `<${key}>${obj[key]}</${key}>`
+  }
+  xml += '</xml>'
+  return xml
+}
 const obj2String = _obj => {
   var t = typeof _obj;
   if (t != "object" || _obj === null) {
@@ -67,6 +77,7 @@ const randomNumber = () => {
   return orderCode;
 };
 
+
 module.exports = {
   async getAll(ctx) {
     const { openid } = ctx.request.body;
@@ -123,29 +134,39 @@ module.exports = {
     const trade_no = randomNumber();
     let order = {
       appid: config.appid,
+      attach: 'test',
       body: body,
+      device_info: 100,
       mch_id: config.mch_id,
       //    生成随机字符串，长度32位以内,我们使用stringRandom库生成16位随机数
       nonce_str: stringRandom(16),
       notify_url: ctx.request.origin + "/pay/result",
       openid: openid,
       out_trade_no: trade_no,
-      spbill_create_ip: config.spbill_create_ip,
-      total_fee,
+      spbill_create_ip: ctx.request.ip.replace(/::ffff:/g, ''),
+      total_fee: total_fee,
       trade_type: "JSAPI"
     };
     //    将参数对象转为key=value模式的字符串,用&分隔
 
     let stringA = obj2String(order);
     //    将生成的字符串末尾拼接上API密钥（key设置路径：微信商户平台(pay.weixin.qq.com)-->账户设置-->API安全-->密钥设置）
-    let stringSignTemp = stringA + `&key=${config.apiKey}`;
+    let stringSignTemp = stringA + `&key=${config.merchantKey}`;
     //    通过HMAC-SHA256或者MD5生成sign签名，这里我们使用md5，然后将签名加入参数对象内
-    let md5 = crypto.createHash("md5");
-    md5.update(stringSignTemp);
-    order.sign = md5.digest("hex").toUpperCase();
+    // let md5 = crypto.createHash("md5");
+    // md5.update(stringSignTemp);
+    // order.sign = md5.digest("hex").toUpperCase();
+    stringSignTemp = stringSignTemp.replace(/\"/g, '');
+    stringSignTemp = stringSignTemp.replace('{', '');
+    stringSignTemp = stringSignTemp.replace('}', '');
+    stringSignTemp = stringSignTemp.replace(/,/g, '&');
+    stringSignTemp = stringSignTemp.replace(/:/g, '=');
+    stringSignTemp = stringSignTemp.replace('https=', 'https:');
+    order.sign = md5(stringSignTemp).toUpperCase();
     //    将参数对象专为xml格式
     const builder = new Xml2js.Builder();
-    const xml = builder.buildObject(order);
+    const xml = objToXml(order);
+
     //    发送请求
     await axios.post(url, xml).then(async res => {
       //   由于微信服务器返回的data格式是xml，所以这里我们需要转成object
@@ -162,16 +183,17 @@ module.exports = {
           package: `prepay_id=${xmlObj.xml.prepay_id[0]}`,
           signType: "MD5",
           timeStamp: new Date().getTime().toString(),
-          key: config.getItem("wx.merchantKey")
         };
         const StringPay = obj2String(payData);
-        let payMd5 = crypto.createHash("md5");
-        payMd5.update(StringPay);
-        let paySign = payMd5.digest("hex").toUpperCase();
-        payData.paySign = paySign;
-        delete payData.key;
-        //前面已经将需要的字段拼接好，将对象从方法返回，服务端可以将对象直接传回给小程序客户端
-        return payData;
+        //    将生成的字符串末尾拼接上API密钥（key设置路径：微信商户平台(pay.weixin.qq.com)-->账户设置-->API安全-->密钥设置）
+        let stringSignTemp2 = StringPay + `&key=${config.merchantKey}`;
+        stringSignTemp2 = stringSignTemp2.replace(/\"/g, '');
+        stringSignTemp2 = stringSignTemp2.replace('{', '');
+        stringSignTemp2 = stringSignTemp2.replace('}', '');
+        stringSignTemp2 = stringSignTemp2.replace(/,/g, '&');
+        stringSignTemp2 = stringSignTemp2.replace(/:/g, '=');
+        payData.paySign = md5(stringSignTemp2).toUpperCase();
+        ctx.body = payData;
       } else {
         result.message = `支付失败,${xmlObj.xml.return_msg[0]}`;
         ctx.body = result;

@@ -31,14 +31,7 @@ app.use(require("koa-static")(__dirname + "/public"));
 app.use(views(__dirname + '/views'))
 // 跨域解决
 app.use(
-    cors({
-        origin: function (ctx) {
-            // if (ctx.url === "/test") {
-            //   return "*"; // 允许来自所有域名请求
-            // }
-            // return "http://localhost:8080";
-            return "*";
-        },
+    cors({    
         exposeHeaders: ["WWW-Authenticate", "Server-Authorization"],
         maxAge: 5,
         credentials: true,
